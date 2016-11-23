@@ -136,7 +136,7 @@ namespace DebugConsoleExample
                 }
             
                 lastr = r;
-                r = console.Rendering;
+                r = console.RenderingInfo;
     
 
                 if (this.InvokeRequired)
@@ -197,15 +197,15 @@ namespace DebugConsoleExample
         {
             if (lastr != null && r != null)
             {
-                if (lastr.VisableOutputs.Length != r.VisableOutputs.Length)
+                if (lastr.Lines.Length != r.Lines.Length)
                 {
                     tbOutput.Clear();
-                    for (int i = 0; i < r.VisableOutputs.Length; i++)
+                    for (int i = 0; i < r.Lines.Length; i++)
                     {
                         int index = tbOutput.TextLength;
-                        tbOutput.AppendText(r.VisableOutputs[i] + Environment.NewLine);
-                        tbOutput.Select(index, r.VisableOutputs[i].Length);
-                        tbOutput.SelectionColor = Color.FromArgb(r.VisableOutputColors[i][0], r.VisableOutputColors[i][1], r.VisableOutputColors[i][2]);
+                        tbOutput.AppendText(r.Lines[i] + Environment.NewLine);
+                        tbOutput.Select(index, r.Lines[i].Length);
+                        tbOutput.SelectionColor = System.Drawing.Color.FromArgb(r.LineColors[i].A, r.LineColors[i].B, r.LineColors[i].G, r.LineColors[i].B);
                         tbOutput.DeselectAll();
                     }
                 }

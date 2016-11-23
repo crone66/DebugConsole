@@ -20,7 +20,7 @@ namespace DebugConsole
         private string currentCommand;
         private int cursorIndex;
         private List<string> output;
-        private List<int[]> colors;
+        private List<Color> colors;
         private bool isOpen;
         private bool isCursorVisable;
         private float elapsedBlinking;
@@ -42,14 +42,6 @@ namespace DebugConsole
             get
             {
                 return isOpen;
-            }
-        }
-
-        public RenderInformation Rendering
-        {
-            get
-            {
-                return RenderingInfo;
             }
         }
 
@@ -88,7 +80,7 @@ namespace DebugConsole
         public void Reset()
         {
             output = new List<string>();
-            colors = new List<int[]>();
+            colors = new List<Color>();
             cursorIndex = 0;
             currentCommand = "";
             isOpen = false;
@@ -190,29 +182,28 @@ namespace DebugConsole
             output.Clear();
         }
 
-        public void WriteLine(string text, int r, int g, int b)
+        public void WriteLine(string text, byte r, byte g, byte b)
         {
             output.Add(text);
-            colors.Add(new int[3] { r, g, b });
+            colors.Add(new Color(r, g, b));
         }
 
-        public void WriteLines(string[] lines, int r, int g, int b)
+        public void WriteLines(string[] lines, byte r, byte g, byte b)
         {
             output.AddRange(lines);
-            int[] color = new int[3] { r, g, b };
+            Color color = new Color(r, g, b);
             for (int i = 0; i < lines.Length; i++)
             {
                 colors.Add(color);
             }
         }
 
-        public void WriteLines(string[] lines, int[] r, int[] g, int[] b)
+        public void WriteLines(string[] lines, byte[] r, byte[] g, byte[] b)
         {
             output.AddRange(lines);
             for (int i = 0; i < lines.Length; i++)
             {
-                int[] color = new int[3] { r[i], g[i], b[i] };
-                colors.Add(color);
+                colors.Add(new Color(r[i], g[i], b[i]));
             }
         }
 
