@@ -180,6 +180,7 @@ namespace DebugConsole
         public void Clear()
         {
             output.Clear();
+            colors.Clear();
         }
 
         public void WriteLine(string text, byte r, byte g, byte b)
