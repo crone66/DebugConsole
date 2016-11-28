@@ -25,6 +25,7 @@ namespace DebugConsole
         private bool isCursorVisable;
         private float elapsedBlinking;
         private float elapsedArrowKeys;
+        private Color defaultColor;
 
         private RenderInformation renderingInfo;
         private RenderInformation lastRenderingInfo;
@@ -61,15 +62,36 @@ namespace DebugConsole
             }
         }
 
+        public Color DefaultColor
+        {
+            get
+            {
+                return defaultColor;
+            }
+
+            set
+            {
+                if (value.A > 10)
+                {
+                    defaultColor = value;
+                }
+                else
+                {
+                    throw new System.ArgumentException("Value of alpha channel must be greater than 10");
+                }
+            }
+        }
+
         public DebuggingConsole()
         {
             commands = new Dictionary<string, CommandDescriptor>();
             Reset();
         }
 
-        public DebuggingConsole(CommandDescriptor[] commands)
+        public DebuggingConsole(CommandDescriptor[] commands, Color defaultColor)
         {
             this.commands = new Dictionary<string, CommandDescriptor>();
+            DefaultColor = defaultColor;
             Reset();
             for (int i = 0; i < commands.Length; i++)
             {
@@ -181,6 +203,12 @@ namespace DebugConsole
         {
             output.Clear();
             colors.Clear();
+        }
+
+        public void WriteLine(string text)
+        {
+            output.Add(text);
+            colors.Add(defaultColor);
         }
 
         public void WriteLine(string text, byte r, byte g, byte b)
