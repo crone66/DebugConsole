@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.tbOutput = new System.Windows.Forms.RichTextBox();
-            this.tbInput = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tbInput = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,43 +40,43 @@
             this.tbOutput.Location = new System.Drawing.Point(3, 3);
             this.tbOutput.Name = "tbOutput";
             this.tbOutput.ReadOnly = true;
-            this.tbOutput.Size = new System.Drawing.Size(733, 416);
+            this.tbOutput.Size = new System.Drawing.Size(733, 418);
             this.tbOutput.TabIndex = 0;
             this.tbOutput.Text = "";
             this.tbOutput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.tbOutput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
-            // tbInput
-            // 
-            this.tbInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbInput.Location = new System.Drawing.Point(3, 425);
-            this.tbInput.Name = "tbInput";
-            this.tbInput.ReadOnly = true;
-            this.tbInput.Size = new System.Drawing.Size(733, 20);
-            this.tbInput.TabIndex = 1;
-            this.tbInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.tbInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.tbInput, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tbOutput, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tbInput, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(739, 450);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(739, 452);
             this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // tbInput
+            // 
+            this.tbInput.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.tbInput.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.tbInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbInput.FormattingEnabled = true;
+            this.tbInput.Location = new System.Drawing.Point(3, 427);
+            this.tbInput.Name = "tbInput";
+            this.tbInput.Size = new System.Drawing.Size(733, 21);
+            this.tbInput.TabIndex = 1;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(739, 450);
+            this.ClientSize = new System.Drawing.Size(739, 452);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -85,7 +85,6 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -93,8 +92,8 @@
         #endregion
 
         private System.Windows.Forms.RichTextBox tbOutput;
-        private System.Windows.Forms.TextBox tbInput;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ComboBox tbInput;
     }
 }
 

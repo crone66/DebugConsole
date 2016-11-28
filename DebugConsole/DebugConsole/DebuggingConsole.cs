@@ -30,6 +30,8 @@ namespace DebugConsole
         private RenderInformation renderingInfo;
         private RenderInformation lastRenderingInfo;
 
+        private List<string> matchingCommands;
+
         public Dictionary<string, CommandDescriptor> Commands
         {
             get
@@ -103,6 +105,7 @@ namespace DebugConsole
         {
             output = new List<string>();
             colors = new List<Color>();
+            matchingCommands = new List<string>();
             cursorIndex = 0;
             currentCommand = "";
             isOpen = false;
@@ -185,7 +188,7 @@ namespace DebugConsole
                 }
 
                 lastRenderingInfo = renderingInfo;
-                renderingInfo = new RenderInformation(cursorIndex, -1, isCursorVisable, currentCommand, output.ToArray(), colors.ToArray());
+                renderingInfo = new RenderInformation(cursorIndex, -1, isCursorVisable, currentCommand, output.ToArray(), colors.ToArray(), matchingCommands.ToArray());
             }
         }
 
@@ -272,6 +275,7 @@ namespace DebugConsole
         {
             string command = currentCommand;
             currentCommand = "";
+            matchingCommands.Clear();
             cursorIndex = 0;
             BuildCommand(command);
         }
@@ -388,6 +392,7 @@ namespace DebugConsole
 
                 currentCommand = sb.ToString();
                 cursorIndex++;
+                SearchMatches();
             }
         }
 
@@ -405,6 +410,19 @@ namespace DebugConsole
             {
                 if(cursorIndex + 1 < currentCommand.Length)
                     currentCommand = currentCommand.Remove(cursorIndex, 1);
+            }
+            SearchMatches();
+        }
+
+        private void SearchMatches()
+        {
+            matchingCommands.Clear();
+            foreach (KeyValuePair<string, CommandDescriptor> cmd in commands)
+            {
+                if(cmd.Key.StartsWith(currentCommand))
+                {
+                    matchingCommands.Add(cmd.Key);
+                }
             }
         }
     }

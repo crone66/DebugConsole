@@ -28,7 +28,7 @@ namespace DebugConsoleExample
             cmds.Add(new CommandDescriptor("exec", "executes a given command (just for fun :D)", false, CommandHandler_Exec));
             cmds.Add(new CommandDescriptor("echo", "outputs a given text", false, CommandHandler_Echo));
 
-            console = new DebuggingConsole(cmds.ToArray());
+            console = new DebuggingConsole(cmds.ToArray(), new DebugConsole.Color(255, 255, 255));
             console.Open();
             thread = new Thread(() => { Loop(); });
             thread.IsBackground = true;
@@ -213,6 +213,11 @@ namespace DebugConsoleExample
                 if (lastr.CommandLine != r.CommandLine)
                 {
                     tbInput.Text = r.CommandLine;
+                    tbInput.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    tbInput.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    AutoCompleteStringCollection auto = new AutoCompleteStringCollection();
+                    auto.AddRange(r.AutoComplete);
+                    tbInput.AutoCompleteCustomSource = auto;
                 }
             }
         }
