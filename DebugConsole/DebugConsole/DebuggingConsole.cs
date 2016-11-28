@@ -84,6 +84,25 @@ namespace DebugConsole
             }
         }
 
+        public string CurrentCommand
+        {
+            get
+            {
+                return currentCommand;
+            }
+
+            set
+            {
+                if (currentCommand != null)
+                {
+                    currentCommand = value;
+                    cursorIndex = currentCommand.Length;
+                }
+                else
+                    throw new System.NullReferenceException();
+            }
+        }
+
         public DebuggingConsole()
         {
             commands = new Dictionary<string, CommandDescriptor>();
@@ -107,7 +126,7 @@ namespace DebugConsole
             colors = new List<Color>();
             matchingCommands = new List<string>();
             cursorIndex = 0;
-            currentCommand = "";
+            CurrentCommand = "";
             isOpen = false;
             isCursorVisable = false;
             elapsedBlinking = 0f;
@@ -182,13 +201,13 @@ namespace DebugConsole
 
                     if (arrowRightPressed)
                     {
-                        cursorIndex += (cursorIndex >= currentCommand.Length ? currentCommand.Length -1 : 1);
+                        cursorIndex += (cursorIndex >= CurrentCommand.Length ? CurrentCommand.Length -1 : 1);
                         elapsedArrowKeys = 0f;
                     }
                 }
 
                 lastRenderingInfo = renderingInfo;
-                renderingInfo = new RenderInformation(cursorIndex, -1, isCursorVisable, currentCommand, output.ToArray(), colors.ToArray(), matchingCommands.ToArray());
+                renderingInfo = new RenderInformation(cursorIndex, -1, isCursorVisable, CurrentCommand, output.ToArray(), colors.ToArray(), matchingCommands.ToArray());
             }
         }
 
@@ -273,8 +292,8 @@ namespace DebugConsole
 
         private void TryExecute()
         {
-            string command = currentCommand;
-            currentCommand = "";
+            string command = CurrentCommand;
+            CurrentCommand = "";
             matchingCommands.Clear();
             cursorIndex = 0;
             BuildCommand(command);
@@ -385,12 +404,12 @@ namespace DebugConsole
             if (c >= 32 && c <= 125)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append(currentCommand.Substring(0, cursorIndex));
+                sb.Append(CurrentCommand.Substring(0, cursorIndex));
                 sb.Append(c);
-                if(cursorIndex + 1 < currentCommand.Length)
-                    sb.Append(currentCommand.Substring(cursorIndex + 1));
+                if(cursorIndex + 1 < CurrentCommand.Length)
+                    sb.Append(CurrentCommand.Substring(cursorIndex + 1));
 
-                currentCommand = sb.ToString();
+                CurrentCommand = sb.ToString();
                 cursorIndex++;
                 SearchMatches();
             }
@@ -402,14 +421,14 @@ namespace DebugConsole
             {
                 if (cursorIndex > 0)
                 {
-                    currentCommand = currentCommand.Remove(cursorIndex - 1, 1);
+                    CurrentCommand = CurrentCommand.Remove(cursorIndex - 1, 1);
                     cursorIndex--;
                 }
             }
             else
             {
-                if(cursorIndex + 1 < currentCommand.Length)
-                    currentCommand = currentCommand.Remove(cursorIndex, 1);
+                if(cursorIndex + 1 < CurrentCommand.Length)
+                    CurrentCommand = CurrentCommand.Remove(cursorIndex, 1);
             }
             SearchMatches();
         }
@@ -419,7 +438,7 @@ namespace DebugConsole
             matchingCommands.Clear();
             foreach (KeyValuePair<string, CommandDescriptor> cmd in commands)
             {
-                if(cmd.Key.StartsWith(currentCommand))
+                if(cmd.Key.StartsWith(CurrentCommand))
                 {
                     matchingCommands.Add(cmd.Key);
                 }
