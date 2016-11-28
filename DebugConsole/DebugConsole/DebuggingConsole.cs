@@ -93,10 +93,11 @@ namespace DebugConsole
 
             set
             {
-                if (currentCommand != null)
+                if (value != null)
                 {
                     currentCommand = value;
                     cursorIndex = currentCommand.Length;
+                    SearchMatches();
                 }
                 else
                     throw new System.NullReferenceException();
@@ -410,7 +411,6 @@ namespace DebugConsole
                     sb.Append(CurrentCommand.Substring(cursorIndex + 1));
 
                 CurrentCommand = sb.ToString();
-                cursorIndex++;
                 SearchMatches();
             }
         }
@@ -422,7 +422,6 @@ namespace DebugConsole
                 if (cursorIndex > 0)
                 {
                     CurrentCommand = CurrentCommand.Remove(cursorIndex - 1, 1);
-                    cursorIndex--;
                 }
             }
             else
