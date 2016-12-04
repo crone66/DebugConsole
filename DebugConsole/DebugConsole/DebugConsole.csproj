@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Color.cs" />
     <Compile Include="CommandDescriptor.cs" />
+    <Compile Include="CommandManager.cs" />
     <Compile Include="DebuggingConsole.cs" />
     <Compile Include="ExecuteCommandArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

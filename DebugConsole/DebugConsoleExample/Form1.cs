@@ -13,6 +13,7 @@ namespace DebugConsoleExample
         List<int> keys = new List<int>();
         RenderInformation lastr, r;
         Thread thread;
+        CommandManager cmdManager;
         public Form1()
         {
             InitializeComponent();
@@ -20,6 +21,7 @@ namespace DebugConsoleExample
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            cmdManager = new CommandManager();
             List<CommandDescriptor> cmds = new List<CommandDescriptor>();
             cmds.Add(new CommandDescriptor("help", "lists all availble commands", false, CommandHandler_Help));
             cmds.Add(new CommandDescriptor("clear", "clears console window", false, CommandHandler_Clear));
@@ -39,9 +41,9 @@ namespace DebugConsoleExample
         {
             if (e.Args.Length > 0)
             {
-                List<string> newArgs = new List<string>(e.Args);
+                List<object> newArgs = new List<object>(e.Args);
                 newArgs.RemoveAt(0);
-                console.ExecuteCommand(e.Args[0], newArgs.ToArray());
+                console.ExecuteCommand(e.Args[0].ToString(), newArgs.ToArray());
             }
         }
 
@@ -49,7 +51,7 @@ namespace DebugConsoleExample
         {
             if (e.Args.Length > 0)
             {
-                console.WriteLine(e.Args[0], 0, 0, 0);
+                console.WriteLine(e.Args[0].ToString(), 0, 0, 0);
             }
         }
 
@@ -108,12 +110,19 @@ namespace DebugConsoleExample
             }
         }
 
+        private void CommandHandler_Run(object sender, ExecuteCommandArgs args)
+        {
+            CommandDescriptor cmd = (CommandDescriptor)sender;
+            console.WriteLine(cmd.Command + ": " + args.Args[0].ToString(), 0, 0, 0);
+        }
+
 
         private void Loop()
         {
             int sleep = 15;
             while (console.IsOpen)
             {
+                cmdManager.Update(15f);
                 lock (keys)
                 {
                     if (keys.Count > 0)
@@ -160,15 +169,6 @@ namespace DebugConsoleExample
                     keys.Add(-2);
                 else if (e.KeyCode == Keys.Right)
                     keys.Add(-1);
-                /*else
-                {
-                    if (e.Shift || e.KeyValue < 65 || e.KeyValue > 90)
-                        keys.Add(e.KeyValue);
-                    else if (e.Shift && e.KeyValue == 188)
-                        keys.Add(59);
-                    else
-                        keys.Add(e.KeyValue + 32);
-                }*/
             }
         }
 
@@ -193,6 +193,16 @@ namespace DebugConsoleExample
             }
         }
 
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            cmdManager.AddCommand(new CommandDescriptor("Run", "", false, false, 0, true, CommandHandler_Run, 1));
+        }
+
         private void UpdateControls()
         {
             if (lastr != null && r != null)
@@ -205,7 +215,7 @@ namespace DebugConsoleExample
                         int index = tbOutput.TextLength;
                         tbOutput.AppendText(r.Lines[i] + Environment.NewLine);
                         tbOutput.Select(index, r.Lines[i].Length);
-                        tbOutput.SelectionColor = System.Drawing.Color.FromArgb(r.LineColors[i].A, r.LineColors[i].B, r.LineColors[i].G, r.LineColors[i].B);
+                        tbOutput.SelectionColor = System.Drawing.Color.FromArgb(r.LineColors[i].A, r.LineColors[i].R, r.LineColors[i].G, r.LineColors[i].B);
                         tbOutput.DeselectAll();
                     }
                 }

@@ -11,6 +11,9 @@ using System.Threading;
 
 namespace DebugConsole
 {
+    /// <summary>
+    /// Debugging console with command parser
+    /// </summary>
     public class DebuggingConsole
     {
         private const float cursorBlinkInverval = 1000f;
@@ -104,12 +107,20 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Initzializes a new debugging console
+        /// </summary>
         public DebuggingConsole()
         {
             commands = new Dictionary<string, CommandDescriptor>();
             Reset();
         }
 
+        /// <summary>
+        /// Initzializes a new debugging console
+        /// </summary>
+        /// <param name="commands">Adds available commands</param>
+        /// <param name="defaultColor">Sets the default text color</param>
         public DebuggingConsole(CommandDescriptor[] commands, Color defaultColor)
         {
             this.commands = new Dictionary<string, CommandDescriptor>();
@@ -121,6 +132,9 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Resets the whole console
+        /// </summary>
         public void Reset()
         {
             output = new List<string>();
@@ -134,6 +148,11 @@ namespace DebugConsole
             elapsedArrowKeys = arrowMoveInterval;
         }
 
+        /// <summary>
+        /// Adds new commands to the debugging console
+        /// </summary>
+        /// <param name="command">Command description</param>
+        /// <returns>Retruns false if the command already exists</returns>
         public bool AddCommand(CommandDescriptor command)
         {
             if (Commands.ContainsKey(command.Command))
@@ -143,6 +162,11 @@ namespace DebugConsole
             return true;
         }
 
+        /// <summary>
+        /// Removes a given command
+        /// </summary>
+        /// <param name="command">Command that should be removed</param>
+        /// <returns>Returns false when the given command doesn't exists</returns>
         public bool RemoveCommand(CommandDescriptor command)
         {
             if (Commands.ContainsKey(command.Command))
@@ -154,6 +178,11 @@ namespace DebugConsole
             return false;
         }
 
+        /// <summary>
+        /// Removes a given command
+        /// </summary>
+        /// <param name="command">Command that should be removed</param>
+        /// <returns>Returns false when the given command doesn't exists</returns>
         public bool RemoveCommand(string command)
         {
             if (Commands.ContainsKey(command))
@@ -165,6 +194,10 @@ namespace DebugConsole
             return false;
         }
 
+        /// <summary>
+        /// Inserts a string on the current cursor position
+        /// </summary>
+        /// <param name="insert">string to insert</param>
         public void Insert(string insert)
         {
             for (int i = 0; i < insert.Length; i++)
@@ -173,19 +206,32 @@ namespace DebugConsole
             }
         }
 
-        public void Update(float elapsedMilliseconds, char c, bool arrowLeftPressed, bool arrowRightPressed)
+        /// <summary>
+        /// Updates the debugging console
+        /// </summary>
+        /// <param name="elapsedSeconds">Elapsed seconds since last update</param>
+        /// <param name="c">Pressed char</param>
+        /// <param name="arrowLeftPressed">State of the left arrow key</param>
+        /// <param name="arrowRightPressed">State of the right arrow key</param>
+        public void Update(float elapsedSeconds, char c, bool arrowLeftPressed, bool arrowRightPressed)
         {
             CheckChar(c);
-            Update(elapsedMilliseconds, arrowLeftPressed, arrowRightPressed);
+            Update(elapsedSeconds, arrowLeftPressed, arrowRightPressed);
         }
 
-        public void Update(float elapsedMilliseconds, bool arrowLeftPressed, bool arrowRightPressed)
+        /// <summary>
+        /// Updates the debugging console
+        /// </summary>
+        /// <param name="elapsedSeconds">Elapsed seconds since last update</param>
+        /// <param name="arrowLeftPressed">State of the left arrow key</param>
+        /// <param name="arrowRightPressed">State of the right arrow key</param>
+        public void Update(float elapsedSeconds, bool arrowLeftPressed, bool arrowRightPressed)
         {
             if(IsOpen)
             {
                 //cursor blinking
-                elapsedBlinking += elapsedMilliseconds;
-                elapsedArrowKeys += elapsedMilliseconds;
+                elapsedBlinking += elapsedSeconds;
+                elapsedArrowKeys += elapsedSeconds;
                 if(elapsedBlinking >= cursorBlinkInverval)
                 {
                     elapsedBlinking = 0f;
@@ -212,34 +258,61 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Opens the console 
+        /// </summary>
         public void Open()
         {
             isOpen = true;
         }
 
+        /// <summary>
+        /// Closes the console
+        /// </summary>
         public void Close()
         {
             isOpen = false;
         }
 
+        /// <summary>
+        /// Clears the console output
+        /// </summary>
         public void Clear()
         {
             output.Clear();
             colors.Clear();
         }
 
+        /// <summary>
+        /// Adds a new line to the output
+        /// </summary>
+        /// <param name="text">New output line</param>
         public void WriteLine(string text)
         {
             output.Add(text);
             colors.Add(defaultColor);
         }
 
+        /// <summary>
+        /// Adds a new line to the output
+        /// </summary>
+        /// <param name="text">New output line</param>
+        /// <param name="r">Red color channel (0-255)</param>
+        /// <param name="g">Green color channel (0-255)</param>
+        /// <param name="b">Blue color channel (0-255)</param>
         public void WriteLine(string text, byte r, byte g, byte b)
         {
             output.Add(text);
             colors.Add(new Color(r, g, b));
         }
 
+        /// <summary>
+        /// Adds multiply lines to the output
+        /// </summary>
+        /// <param name="lines">New output lines</param>
+        /// <param name="r">Red color channel (0-255)</param>
+        /// <param name="g">Green color channel (0-255)</param>
+        /// <param name="b">Blue color channel (0-255)</param>
         public void WriteLines(string[] lines, byte r, byte g, byte b)
         {
             output.AddRange(lines);
@@ -250,6 +323,13 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Adds multiply lines to the output
+        /// </summary>
+        /// <param name="lines">New output lines</param>
+        /// <param name="r">Red color channel (0-255)</param>
+        /// <param name="g">Green color channel (0-255)</param>
+        /// <param name="b">Blue color channel (0-255)</param>
         public void WriteLines(string[] lines, byte[] r, byte[] g, byte[] b)
         {
             output.AddRange(lines);
@@ -259,7 +339,12 @@ namespace DebugConsole
             }
         }
 
-        public void ExecuteCommand(string command, string[] args)
+        /// <summary>
+        /// Executes a given command
+        /// </summary>
+        /// <param name="command">Command to execute</param>
+        /// <param name="args">Command execution parameters</param>
+        public void ExecuteCommand(string command, params object[] args)
         {
             if (commands.ContainsKey(command))
             {
@@ -286,21 +371,32 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Executes a given command
+        /// </summary>
+        /// <param name="commandLine"></param>
         public void ExecuteCommand(string commandLine)
         {
-            BuildCommand(commandLine);
+            ParseCommand(commandLine);
         }
 
+        /// <summary>
+        /// Tries to execute the current command line
+        /// </summary>
         private void TryExecute()
         {
             string command = CurrentCommand;
             CurrentCommand = "";
             matchingCommands.Clear();
             cursorIndex = 0;
-            BuildCommand(command);
+            ParseCommand(command);
         }
 
-        private void BuildCommand(string commandLine)
+        /// <summary>
+        /// Parses a given command line and executes the command
+        /// </summary>
+        /// <param name="commandLine">Command line</param>
+        private void ParseCommand(string commandLine)
         {
             List<List<string>> commandParts = SplitCommand(commandLine);
             for (int i = 0; i < commandParts.Count; i++)
@@ -315,6 +411,11 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Splits the command line into commands and args
+        /// </summary>
+        /// <param name="command">command line</param>
+        /// <returns>Returns all command parts</returns>
         private List<List<string>> SplitCommand(string command)
         {
             command = command.Trim();
@@ -378,6 +479,10 @@ namespace DebugConsole
             return commands;
         }
 
+        /// <summary>
+        /// Handles a char depending on it's value
+        /// </summary>
+        /// <param name="c">Input char</param>
         private void CheckChar(char c)
         {
             switch (c)
@@ -400,6 +505,10 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Adds a new char to the current conmand line
+        /// </summary>
+        /// <param name="c"></param>
         private void AddChar(char c)
         {
             if (c >= 32 && c <= 125)
@@ -415,6 +524,10 @@ namespace DebugConsole
             }
         }
 
+        /// <summary>
+        /// Removes a char from the current command line
+        /// </summary>
+        /// <param name="backspace">Indicates whenther the backspace is pressed or not</param>
         private void RemoveChar(bool backspace)
         {
             if (backspace)
@@ -432,6 +545,9 @@ namespace DebugConsole
             SearchMatches();
         }
 
+        /// <summary>
+        /// Searchs matching commands to update the auto suggestion
+        /// </summary>
         private void SearchMatches()
         {
             matchingCommands.Clear();

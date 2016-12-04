@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace DebugConsole
 {
+    /// <summary>
+    /// Holds the Command handler parameters
+    /// </summary>
     public class ExecuteCommandArgs : EventArgs
     {
-        public CommandDescriptor Command;
-        public string[] Args;
+        public object[] Args;
 
-        public ExecuteCommandArgs(CommandDescriptor command, string[] args)
+        /// <summary>
+        /// Initzializes a new ExecuteCOmmandArgs
+        /// </summary>
+        /// <param name="args">Command handler parameters</param>
+        public ExecuteCommandArgs(params object[] args)
         {
-            Command = command;
             Args = args;
         }
     }
