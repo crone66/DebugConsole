@@ -11,6 +11,8 @@ namespace DebugConsole
     /// </summary>
     public class CommandManager
     {
+        private Dictionary<string, CommandDescriptor> registeredCommands;
+
         private CommandDescriptor[] commands;
         private Queue<CommandDescriptor> commandsToExecute;
 
@@ -20,16 +22,52 @@ namespace DebugConsole
         public CommandManager()
         {
             commandsToExecute = new Queue<CommandDescriptor>();
+            registeredCommands = new Dictionary<string, CommandDescriptor>();
+        }
+
+        /// <summary>
+        /// Initzializes a new command manager
+        /// </summary>
+        public CommandManager(CommandDescriptor[] registCommands)
+        {
+            registeredCommands = new Dictionary<string, CommandDescriptor>();
+            commandsToExecute = new Queue<CommandDescriptor>();
+            for (int i = 0; i < registCommands.Length; i++)
+            {
+                AddCommand(registCommands[i]);
+            }
         }
 
         /// <summary>
         /// Adds a new command to the command manager
         /// </summary>
         /// <param name="command"></param>
-        public void AddCommand(CommandDescriptor command)
+        public bool AddCommand(CommandDescriptor command)
         {
-            if(command.RepeatAllowed || !commandsToExecute.Contains(command))
-                commandsToExecute.Enqueue(command);
+            if (!registeredCommands.ContainsKey(command.Command))
+            {
+                registeredCommands.Add(command.Command, command);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Enqueues add command which will be executed on the next update
+        /// </summary>
+        /// <param name="commandName">Command name</param>
+        public bool EnqueueCommand(string commandName)
+        {
+            if (registeredCommands.ContainsKey(commandName))
+            {
+                CommandDescriptor cmd = registeredCommands[commandName];
+                if (cmd.RepeatAllowed || !commandsToExecute.Contains(cmd))
+                {
+                    commandsToExecute.Enqueue(cmd);
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -64,6 +102,16 @@ namespace DebugConsole
                     commandsToExecute.Enqueue(cmd);
                 }
             }
+        }
+
+        /// <summary>
+        /// Indicates whenther a command is registered or not
+        /// </summary>
+        /// <param name="commandName">Command name</param>
+        /// <returns>Returns true when the command is registered</returns>
+        public bool CommandExists(string commandName)
+        {
+            return registeredCommands.ContainsKey(commandName);
         }
     }
 }
